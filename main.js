@@ -11,6 +11,8 @@ let food = {
   x: Math.floor(Math.random() * 15 + 1) * box,
   y: Math.floor(Math.random() * 15 + 1) * box,
 };
+let frutas = 0;
+let totalFrutas = 12;
 
 function criarBG() {
   context.fillStyle = "lightgreen";
@@ -32,7 +34,6 @@ function drawFood() {
 document.addEventListener("keydown", update);
 
 function update(event) {
-  console.log(event.keyCode, " ", direction);
   if (event.keyCode == 37 && direction != "right") direction = "left";
   if (event.keyCode == 38 && direction != "down") direction = "up";
   if (event.keyCode == 39 && direction != "left") direction = "right";
@@ -48,10 +49,12 @@ function iniciarJogo() {
   for (let i = 1; i < snake.length; i++) {
     if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
       clearInterval();
-      let restart = alert("Game Over :(");
+      alert("Game Over :(");
       window.location.reload();
     }
   }
+
+  document.querySelector("#totalFrutas").innerHTML = totalFrutas;
 
   criarBG();
   criaCobrinha();
@@ -75,11 +78,24 @@ function iniciarJogo() {
       break;
   }
 
+  function victory() {
+    if (frutas == totalFrutas) {
+      clearInterval(), 300;
+      setTimeout(() => {
+        alert("Sucesso! :)");
+        window.location.reload();
+      }, 300);
+    }
+  }
+
   if (snakeX != food.x || snakeY != food.y) {
     snake.pop();
   } else {
     food.x = Math.floor(Math.random() * 15 + 1) * box;
     food.y = Math.floor(Math.random() * 15 + 1) * box;
+    frutas++;
+    document.querySelector("#frutas").innerHTML = frutas;
+    victory();
   }
 
   let newHead = {
